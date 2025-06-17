@@ -1,0 +1,1 @@
+# spicycentral-template
