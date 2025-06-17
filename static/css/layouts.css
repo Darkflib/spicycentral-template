@@ -1,0 +1,21 @@
+/* static/css/layouts.css */
+
+/* Standard layout (default Bootstrap container behavior) */
+/* No specific rules needed here unless overriding Bootstrap defaults for standard */
+
+/* Wide layout */
+[data-layout="wide"] main.container {
+    max-width: 95%; /* Or use 'none' for full width like container-fluid */
+}
+
+/* Focused layout */
+[data-layout="focused"] main.container {
+    max-width: 760px; /* Narrower content area */
+    margin-left: auto;
+    margin-right: auto;
+    /* TODO: Add more styles for focused layout, e.g., larger fonts, reduced visual clutter */
+}
+
+[data-layout="focused"] .navbar, [data-layout="focused"] footer {
+    /* TODO: Decide if header/footer should also be narrowed or remain full-width in focused mode */
+}

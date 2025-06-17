@@ -1,0 +1,34 @@
+{# templates/macros/cards.html - Macro for rendering Bootstrap cards #}
+
+{% macro render_card(title, content, image_url=None, link_url=None, extra_classes='') %}
+{#
+    Renders a Bootstrap card.
+
+    Parameters:
+    - title (str): The title of the card.
+    - content (str): HTML content for the card body.
+    - image_url (str, optional): URL for an image to display at the top of the card.
+    - link_url (str, optional): URL the card can link to (e.g., wrapping the title or a button).
+                                If provided, the card title becomes a link. A "Read more" button could also be added.
+    - extra_classes (str, optional): Extra CSS classes to add to the card's main div.
+#}
+<div class="card {{ extra_classes }}">
+    {% if image_url %}
+    <img src="{{ image_url }}" class="card-img-top" alt="{{ title }}">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">
+            {% if link_url %}
+            <a href="{{ link_url }}">{{ title }}</a>
+            {% else %}
+            {{ title }}
+            {% endif %}
+        </h5>
+        <p class="card-text">{{ content }}</p>
+        {% if link_url %}
+        {# TODO: Consider making this button optional or configurable #}
+        <a href="{{ link_url }}" class="btn btn-primary">Read More</a>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}

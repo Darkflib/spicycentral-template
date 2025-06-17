@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% import "macros/cards.html" as card_macros %} {# Though not strictly used, good practice to keep if related content might be added #}
+{% import "macros/common_blocks.html" as common_macros %}
+
+{#
+    Example article data structure:
+    article = {
+        "title": "The Future of Web Development",
+        "publication_date": "October 26, 2023",
+        "author": {
+            "name": "Dr. Web Dev",
+            "avatar": "https://via.placeholder.com/48/ffc107/000000?text=WD",
+            "profile_url": "#drwebdev"
+        },
+        "content_html": "<p>Lorem ipsum dolor sit amet...</p><p>Integer posuere erat a ante...</p>",
+        "video_url": "https://www.youtube.com/watch?v=exampleVideoID"
+    }
+#}
+{% set article = {
+    "title": "Exploring the Depths of Responsive Design",
+    "publication_date": "November 5, 2023",
+    "author": {
+        "name": "Alex Designer",
+        "avatar": "https://via.placeholder.com/48/fd7e14/ffffff?text=AD",
+        "profile_url": "#alexdesigner"
+    },
+    "content_html": """
+        <p class="lead">Responsive web design is an approach that suggests that design and development should respond to the user's behavior and environment based on screen size, platform and orientation.</p>
+        <p>The practice consists of a mix of flexible grids and layouts, images and an intelligent use of CSS media queries. As the user switches from their laptop to iPad, the website should automatically switch to accommodate for resolution, image size and scripting abilities. In other words, the website should have the technology to automatically respond to the user's preferences. This would eliminate the need for a different design and development phase for each new gadget on the market.</p>
+
+        <h3>Key Principles</h3>
+        <ul>
+            <li><strong>Fluid Grids:</strong> Using relative units like percentages, rather than fixed units like pixels or points, for column widths.</li>
+            <li><strong>Flexible Images:</strong> Using `max-width: 100%` and other techniques to ensure images scale within their containing elements.</li>
+            <li><strong>Media Queries:</strong> Applying different CSS rules based on the characteristics of the device, primarily the width of the display.</li>
+        </ul>
+        <p>Let's look at an example of how media queries are used:</p>
+        <pre><code>@media (max-width: 600px) {
+  .facet_sidebar {
+    display: none;
+  }
+}</code></pre>
+        <p>This CSS snippet hides the sidebar on screens smaller than 600px. Such techniques are fundamental to creating adaptive user experiences.</p>
+    """,
+    "video_url": "https://www.youtube.com/watch?v=6DMOyD46Xcg" {# Example video on responsive design #}
+} %}
+
+{% block title %}{{ article.title }} - My Site{% endblock %}
+
+{% block main_content %}
+<div class="container py-4">
+    <article>
+        <header class="mb-4">
+            <h1 class="fw-bold">{{ article.title }}</h1>
+            <div class="text-muted mb-2">
+                <span>Published on {{ article.publication_date }} by </span>
+                {{ common_macros.render_user_profile_badge(
+                    user_name=article.author.name,
+                    avatar_url=article.author.avatar,
+                    profile_url=article.author.profile_url,
+                    size="small"
+                ) }}
+            </div>
+        </header>
+
+        <section class="article-content">
+            {{ article.content_html | safe }}
+        </section>
+
+        {% if article.video_url %}
+        <section class="mt-4">
+            <h3 class="mb-3">Related Video</h3>
+            {{ common_macros.render_video_embed(video_url=article.video_url, platform="youtube", responsive=True, aspect_ratio="16x9") }}
+        </section>
+        {% endif %}
+    </article>
+
+    {# Placeholder for related articles or comments #}
+    <hr class="my-5">
+    <h4>Related Posts (Placeholder)</h4>
+     <div class="row">
+        <div class="col-md-6 mb-3">
+            {{ card_macros.render_card(
+                title="Understanding CSS Grid",
+                content="A deep dive into the capabilities of CSS Grid for modern web layouts.",
+                link_url="#related1"
+            ) }}
+        </div>
+        <div class="col-md-6 mb-3">
+            {{ card_macros.render_card(
+                title="Accessibility in Web Design",
+                content="Ensuring your websites are usable by everyone is crucial. Learn the basics.",
+                link_url="#related2"
+            ) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="p-3">
+    <h4>Table of Contents</h4>
+    <ul class="list-unstyled">
+        <li><a href="#">Introduction</a></li>
+        <li><a href="#">Key Principles</a></li>
+        <li><a href="#">Media Queries Example</a></li>
+        <li><a href="#">Related Video</a></li>
+    </ul>
+    {# TODO: This could be dynamically generated if article headings had IDs #}
+</div>
+{% endblock %}

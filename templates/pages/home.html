@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% import "macros/cards.html" as card_macros %}
+{% import "macros/common_blocks.html" as common_macros %}
+
+{% block title %}Welcome Home! - My Site{% endblock %}
+
+{% block main_content %}
+<div class="container py-4">
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Welcome to Our Awesome Site!</h1>
+            <p class="col-md-8 fs-4">This is a demonstration of various UI components and page structures using Jinja2 macros and Bootstrap 5.</p>
+            {{ common_macros.render_user_profile_badge(user_name="Site Admin", avatar_url="https://via.placeholder.com/48/007bff/ffffff?text=SA", profile_url="#", size="normal") }}
+        </div>
+    </div>
+
+    <h2>Featured Content</h2>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            {{ card_macros.render_card(
+                title="Feature One",
+                content="Discover amazing features that will change your life. Well, maybe not change your life, but they are pretty cool.",
+                image_url="https://via.placeholder.com/400x200/28a745/ffffff?text=Feature+1",
+                link_url="#feature1",
+                extra_classes="h-100"
+            ) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ card_macros.render_card(
+                title="News Update",
+                content="Latest happenings and important announcements. Stay tuned for more information coming soon.",
+                image_url="https://via.placeholder.com/400x200/ffc107/000000?text=News",
+                link_url="#news",
+                extra_classes="h-100"
+            ) }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ card_macros.render_card(
+                title="Tutorial: Getting Started",
+                content="Learn how to use our platform with this simple step-by-step guide. It's easier than you think!",
+                link_url="#tutorial",
+                extra_classes="h-100"
+            ) }}
+        </div>
+    </div>
+
+    <h2 class="mt-4">Watch This!</h2>
+    {{ common_macros.render_video_embed(video_url="https://www.youtube.com/watch?v=dQw4w9WgXcQ", platform="youtube", responsive=True, aspect_ratio="16x9") }}
+
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="p-3">
+    <h4>Quick Links</h4>
+    <ul class="list-unstyled">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Articles</a></li>
+        <li><a href="#">Login</a></li>
+    </ul>
+    {{ common_macros.render_user_profile_badge(user_name="Jane Doe", avatar_url="https://via.placeholder.com/48/6f42c1/ffffff?text=JD", profile_url="#jane", size="small") }}
+</div>
+{% endblock %}

@@ -1,1 +1,77 @@
+<!doctype html>
+<!-- Initial theme and layout set to prevent FOUC. prefs.js will update/manage them. -->
+<html lang="en" data-bs-theme="light" data-layout="standard">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}My Site{% endblock title %}</title> {# Page Title: Used in the browser tab and for SEO. #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts.css') }}">
+    <script>
+        // Immediately-invoked function expression (IIFE) to apply stored preferences
+        // before the rest of the page loads, preventing Flash of Unstyled Content (FOUC).
+        (function() {
+            const PREFERENCES_KEY = 'sitePreferences';
+            const DEFAULT_THEME = 'auto'; // light, dark, auto
+            const DEFAULT_LAYOUT = 'standard'; // standard, wide, focused
+            let theme = DEFAULT_THEME;
+            let layout = DEFAULT_LAYOUT;
 
+            try {
+                const stored = localStorage.getItem(PREFERENCES_KEY);
+                if (stored) {
+                    const prefs = JSON.parse(stored);
+                    theme = prefs.theme || DEFAULT_THEME;
+                    layout = prefs.layout || DEFAULT_LAYOUT;
+                }
+            } catch (e) {
+                console.error("Error reading preferences from localStorage for FOUC prevention:", e);
+            }
+
+            if (theme === 'auto') {
+                document.documentElement.setAttribute('data-bs-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+            }
+            document.documentElement.setAttribute('data-layout', layout);
+        })();
+    </script>
+    {% block head_extra %}{% endblock head_extra %} {# Extra Head Content: For page-specific meta tags, CSS links, or scripts. #}
+</head>
+<body {% block body_attributes %}{% endblock body_attributes %}> {# Body Attributes: Allows customization of body tag (e.g. for specific page classes) #}
+    <header>
+        {% block header %} {# Header Block: Contains site header, typically navigation. #}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Site Title</a>
+                <button id="preferencesPopoverButton" class="btn btn-outline-secondary ms-auto" type="button">
+                    Preferences
+                </button>
+            </div>
+        </nav>
+        {% endblock %}
+    </header>
+
+    <main class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                {% block main_content %}{% endblock main_content %} {# Main Content: Primary content area for the page. #}
+            </div>
+            <div class="col-md-4">
+                {% block sidebar %}{% endblock sidebar %} {# Sidebar: Optional sidebar content. #}
+            </div>
+        </div>
+    </main>
+
+    <footer class="container mt-4 text-center">
+        {% block footer %} {# Footer Block: Site footer, copyright information, etc. #}
+        <p>&copy; 2024 My Site. All rights reserved.</p>
+        {% endblock footer %}
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/prefs.js') }}"></script>
+    {% block scripts_extra %}{% endblock scripts_extra %} {# Extra Scripts: For page-specific JavaScript files or inline scripts. #}
+</body>
+</html>
