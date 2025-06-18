@@ -24,7 +24,7 @@
             {{ title }}
             {% endif %}
         </h5>
-        <p class="card-text">{{ content }}</p>
+        <p class="card-text">{{ content|safe }}</p>
         {% if link_url %}
         {# TODO: Consider making this button optional or configurable #}
         <a href="{{ link_url }}" class="btn btn-primary">Read More</a>
