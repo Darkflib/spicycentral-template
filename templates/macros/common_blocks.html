@@ -20,7 +20,7 @@
     {% else %}
     {# Placeholder avatar: initials or generic icon #}
     <span class="avatar-placeholder rounded-circle me-2 d-flex align-items-center justify-content-center bg-secondary text-white" style="width: {{ current_img_size }}; height: {{ current_img_size }};">
-        {{ user_name[0]|upper if user_name }}
+        {{ user_name[0]|upper if user_name else '' }}
     </span>
     {% endif %}
     {% if profile_url %}
