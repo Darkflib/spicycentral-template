@@ -16,8 +16,9 @@ TEMPLATE_DIR = BASE_DIR / "templates"
 
 def main():
     """
-    Sets up Jinja2 environment, loads templates, renders them with context,
-    and saves them to the output directory.
+    Renders Jinja2 templates into static HTML files using placeholder context data and saves them to the output directory.
+    
+    This function sets up the Jinja2 environment, defines a mock URL resolver for static assets, prepares context data for specific templates, and writes the rendered HTML files to the designated output directory. It prints progress and instructions for viewing the generated files.
     """
     print(f"Initializing Jinja2 environment with template directory: {TEMPLATE_DIR}")
     env = Environment(
@@ -31,8 +32,14 @@ def main():
     # This mock assumes that the 'dist' directory is a sibling to 'static'.
     def mock_url_for(endpoint, filename=''):
         """
-        Mocks the 'url_for' function typically provided by web frameworks.
-        Generates relative paths for static assets suitable for the 'dist' output structure.
+        Generate a relative URL for static assets or fallback links, simulating the behaviour of a web framework's `url_for`.
+        
+        Parameters:
+        	endpoint (str): The endpoint name, typically 'static' for static assets.
+        	filename (str, optional): The asset filename or path.
+        
+        Returns:
+        	str: A relative URL suitable for use in rendered HTML files.
         """
         if endpoint == 'static':
             # Path from an HTML file in 'dist/' to an asset in 'static/'

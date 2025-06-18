@@ -18,9 +18,9 @@
     let currentPrefs = loadPreferences();
 
     /**
-     * Loads preferences from localStorage.
-     * If no preferences are stored, or if they are malformed, returns default preferences.
-     * @returns {object} The loaded or default preferences.
+     * Retrieves user preferences from localStorage, merging them with defaults to ensure all required keys are present.
+     * Returns default preferences if none are stored or if stored data is invalid.
+     * @returns {object} The current user preferences.
      */
     function loadPreferences() {
         const stored = localStorage.getItem(PREFERENCES_KEY);
@@ -34,16 +34,16 @@
     }
 
     /**
-     * Saves the current preferences object to localStorage.
+     * Persistently stores the current user preferences in localStorage.
      */
     function savePreferences() {
         localStorage.setItem(PREFERENCES_KEY, JSON.stringify(currentPrefs));
     }
 
     /**
-     * Applies the selected theme to the document.
-     * Sets the 'data-bs-theme' attribute on the <html> element.
-     * For 'auto' theme, it respects the user's OS-level preference.
+     * Applies the specified theme to the document, updating the 'data-bs-theme' attribute on the <html> element.
+     * For the 'auto' option, the theme is set according to the user's OS-level dark mode preference.
+     * Updates and saves the current theme preference.
      * @param {string} theme - The theme to apply ('light', 'dark', or 'auto').
      */
     function applyTheme(theme) {
@@ -59,9 +59,10 @@
     }
 
     /**
-     * Applies the selected layout to the document.
-     * Sets the 'data-layout' attribute on the <html> element.
-     * @param {string} layout - The layout to apply ('standard', 'wide', or 'focused').
+     * Applies the specified layout to the document and saves the preference.
+     * 
+     * Sets the 'data-layout' attribute on the `<html>` element to control site layout appearance.
+     * @param {string} layout - The layout mode to apply ('standard', 'wide', or 'focused').
      */
     function applyLayout(layout) {
         document.documentElement.setAttribute('data-layout', layout);
@@ -72,10 +73,12 @@
     }
 
     /**
-     * Creates and initializes a Bootstrap Popover for changing preferences.
-     * The popover's content is dynamically generated with controls for theme and layout.
-     * @param {HTMLElement} triggerElement - The HTML element that will trigger the popover.
-     * @returns {bootstrap.Popover | undefined} The Popover instance, or undefined if Bootstrap Popover component is not available.
+     * Creates and attaches a Bootstrap Popover to the specified element, providing UI controls for changing theme and layout preferences.
+     * 
+     * The popover includes dropdowns for theme and layout selection, initialised to the current preferences. Changes made via the popover are applied and saved immediately.
+     * 
+     * @param {HTMLElement} triggerElement - The element that triggers the popover when clicked.
+     * @returns {bootstrap.Popover | undefined} The Popover instance if initialised successfully, or undefined if Bootstrap Popover is unavailable.
      */
     function createPreferencesPopover(triggerElement) {
         if (!window.bootstrap || !window.bootstrap.Popover) {
