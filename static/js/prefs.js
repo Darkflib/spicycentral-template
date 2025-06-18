@@ -25,12 +25,21 @@
     function loadPreferences() {
         const stored = localStorage.getItem(PREFERENCES_KEY);
         try {
-            // Merge stored preferences with defaults to ensure all keys are present.
-            return stored ? { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) } : { ...DEFAULT_PREFERENCES };
+            const parsed = stored ? JSON.parse(stored) : {};
+            const safe = {
+                theme: ['light', 'dark', 'auto'].includes(parsed.theme)
+                    ? parsed.theme
+                    : DEFAULT_PREFERENCES.theme,
+                layout: ['standard', 'wide', 'focused'].includes(parsed.layout)
+                    ? parsed.layout
+                    : DEFAULT_PREFERENCES.layout
+            };
+            return { ...DEFAULT_PREFERENCES, ...safe };
         } catch (e) {
             console.error("Error parsing stored preferences:", e);
-            return { ...DEFAULT_PREFERENCES }; // Return defaults on error.
+            return { ...DEFAULT_PREFERENCES };
         }
+    }
     }
 
     /**
