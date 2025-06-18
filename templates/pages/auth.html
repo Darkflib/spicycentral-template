@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Login / Register - My Site{% endblock %}
+
+{% block main_content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            {# TODO: These are frontend templates only. Actual authentication logic (handling form submissions, user management) needs backend implementation. #}
+
+            <ul class="nav nav-pills nav-fill mb-3" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-form" type="button" role="tab" aria-controls="login-form" aria-selected="true">Login</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-form" type="button" role="tab" aria-controls="register-form" aria-selected="false">Register</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="authTabsContent">
+                <div class="tab-pane fade show active" id="login-form" role="tabpanel" aria-labelledby="login-tab">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="card-title text-center mb-4">Login</h2>
+                            <form action="#" method="POST"> {# Replace # with actual login endpoint #}
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="loginEmail" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="loginPassword" name="password" required>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="loginRemember" name="remember">
+                                    <label class="form-check-label" for="loginRemember">Remember me</label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                                </div>
+                                <p class="text-center mt-3"><a href="#">Forgot password?</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="register-form" role="tabpanel" aria-labelledby="register-tab">
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="card-title text-center mb-4">Register</h2>
+                            <form action="#" method="POST"> {# Replace # with actual register endpoint #}
+                                <div class="mb-3">
+                                    <label for="registerUsername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="registerUsername" name="username" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label">Email address</label>
+                                    <input type="email" class="form-control" id="registerEmail" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="registerPassword" name="password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="registerConfirmPassword" name="confirm_password" required>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="registerTerms" name="terms" required>
+                                    <label class="form-check-label" for="registerTerms">I agree to the <a href="#">terms and conditions</a></label>
+                                </div>
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success btn-lg">Register</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{# Sidebar can be kept minimal or removed for auth pages #}
+<div class="p-3">
+    <h4>Why Register?</h4>
+    <p>Create an account to access exclusive content, save your preferences, and engage with our community!</p>
+</div>
+{% endblock %}

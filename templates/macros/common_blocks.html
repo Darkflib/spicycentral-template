@@ -1,0 +1,107 @@
+{# templates/macros/common_blocks.html - Macros for common UI blocks #}
+
+{% macro render_user_profile_badge(user_name, avatar_url=None, profile_url=None, size='normal') %}
+{#
+    Renders a user profile badge.
+
+    Parameters:
+    - user_name (str): The name of the user.
+    - avatar_url (str, optional): URL for the user's avatar image.
+    - profile_url (str, optional): URL to the user's profile page. If provided, the badge becomes a link.
+    - size (str, optional): Size of the badge. 'small', 'normal', or 'large'.
+#}
+{% set size_class = 'user-badge-' ~ size %}
+{% set img_size_map = {'small': '32px', 'normal': '48px', 'large': '64px'} %}
+{% set current_img_size = img_size_map.get(size, '48px') %}
+
+<div class="user-badge {{ size_class }} d-inline-flex align-items-center">
+    {% if avatar_url %}
+    <img src="{{ avatar_url }}" alt="{{ user_name }}'s avatar" class="rounded-circle me-2" style="width: {{ current_img_size }}; height: {{ current_img_size }}; object-fit: cover;">
+    {% else %}
+    {# Placeholder avatar: initials or generic icon #}
+    <span class="avatar-placeholder rounded-circle me-2 d-flex align-items-center justify-content-center bg-secondary text-white" style="width: {{ current_img_size }}; height: {{ current_img_size }};">
+        {{ user_name[0]|upper if user_name }}
+    </span>
+    {% endif %}
+    {% if profile_url %}
+    <a href="{{ profile_url }}" class="text-decoration-none">{{ user_name }}</a>
+    {% else %}
+    <span>{{ user_name }}</span>
+    {% endif %}
+</div>
+{# TODO: Add specific CSS for .user-badge-small, .user-badge-normal, .user-badge-large if more styling than just image size is needed #}
+{% endmacro %}
+
+
+{% macro render_video_embed(video_url, platform='youtube', responsive=True, aspect_ratio='16x9') %}
+{#
+    Renders an embedded video player.
+
+    Parameters:
+    - video_url (str): The URL of the video.
+    - platform (str, optional): The video platform. 'youtube' or 'videojs'. Defaults to 'youtube'.
+    - responsive (bool, optional): Whether to make the embed responsive (using Bootstrap's aspect ratio classes). Defaults to True.
+    - aspect_ratio (str, optional): The aspect ratio for responsive embeds (e.g., '16x9', '4x3'). Defaults to '16x9'.
+#}
+
+{% if platform == 'youtube' %}
+    {# Extract YouTube video ID from various URL formats #}
+    {% set video_id = '' %}
+    {% if 'youtu.be/' in video_url %}
+        {% set video_id = video_url.split('youtu.be/')[-1].split('?')[0] %}
+    {% elif 'youtube.com/watch?v=' in video_url %}
+        {% set video_id = video_url.split('v=')[-1].split('&')[0] %}
+    {% elif 'youtube.com/embed/' in video_url %}
+        {% set video_id = video_url.split('embed/')[-1].split('?')[0] %}
+    {% else %}
+        {# Basic fallback, may not always work #}
+        {% set video_id = video_url %}
+    {% endif %}
+
+    {% if video_id %}
+        {% set embed_url = 'https://www.youtube.com/embed/' ~ video_id %}
+        {% if responsive %}
+        <div class="ratio ratio-{{ aspect_ratio }}">
+            <iframe src="{{ embed_url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        {% else %}
+        <iframe width="560" height="315" src="{{ embed_url }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        {% endif %}
+    {% else %}
+    <p class="text-danger">Could not parse YouTube video URL: {{ video_url }}</p>
+    {% endif %}
+
+{% elif platform == 'videojs' %}
+    {# TODO: Implement VideoJS player setup #}
+    {# This would typically involve a <video-js> tag, setup options, and possibly custom CSS/JS #}
+    <div class="videojs-player-container {% if responsive %} ratio ratio-{{ aspect_ratio }} {% endif %}">
+        <video
+            id="videojs-player-{{ range(1, 10000) | random }}" {# Generate a unique ID #}
+            class="video-js"
+            controls
+            preload="auto"
+            {% if responsive %} style="width:100%; height:100%;" {% else %} width="640" height="360" {% endif %}
+            data-setup='{ "techOrder": ["html5", "youtube"], "sources": [{ "type": "video/youtube", "src": "{{ video_url }}"}] }'>
+            {# If it's not a YouTube video, the data-setup would be different, e.g. for an MP4 file:
+            data-setup='{}' and <source src="{{ video_url }}" type="video/mp4">
+            This part needs more robust handling based on video_url type if not using video/youtube tech for VideoJS.
+            #}
+            <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a
+                web browser that <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+        </video>
+    </div>
+    <p class="text-muted"><small>VideoJS Player Placeholder for: {{ video_url }}</small></p>
+    {# TODO: Ensure VideoJS CSS and JS are linked in base.html or loaded dynamically when this macro is used. #}
+    {# For example, within scripts_extra block:
+       <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+       <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/3.0.1/Youtube.min.js"></script> // If YouTube tech is used
+    #}
+
+{% else %}
+    <p class="text-danger">Unsupported video platform: {{ platform }}</p>
+{% endif %}
+
+{% endmacro %}
